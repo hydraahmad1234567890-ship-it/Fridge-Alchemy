@@ -12,20 +12,34 @@ export async function fetchVarieties(input, searchMode = 'inventory', servings =
   try {
     let recipeIds = [];
     
+    // Normalize input (e.g. Choco -> Chocolate)
+    const normalizedInput = input.toLowerCase().replace(/\bchoco\b/g, 'chocolate');
+
     if (searchMode === 'inventory') {
-      // 1. Find recipes by ingredients
       const response = await fetch(
-        `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${encodeURIComponent(input)}&number=3&ranking=1&apiKey=${SPOONACULAR_KEY}`
+        `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${encodeURIComponent(normalizedInput)}&number=3&ranking=1&apiKey=${SPOONACULAR_KEY}`
       );
       const data = await response.json();
       recipeIds = data.map(r => r.id);
     } else {
-      // 2. Search by dish name
+      // 1. Initial Search
       const response = await fetch(
-        `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(input)}&number=3&apiKey=${SPOONACULAR_KEY}`
+        `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(normalizedInput)}&number=3&apiKey=${SPOONACULAR_KEY}`
       );
       const data = await response.json();
-      recipeIds = data.results.map(r => r.id);
+      recipeIds = (data.results || []).map(r => r.id);
+
+      // 2. SMART FALLBACK: If no results, try splitting keywords (e.g. "Choco Lava Cake" -> "Chocolate Lava Cake")
+      if (recipeIds.length === 0) {
+        const words = normalizedInput.split(' ').filter(w => w.length > 3);
+        if (words.length > 0) {
+           const fallbackResponse = await fetch(
+             `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(words.join(' '))}&number=3&apiKey=${SPOONACULAR_KEY}`
+           );
+           const fallbackData = await fallbackResponse.json();
+           recipeIds = (fallbackData.results || []).map(r => r.id);
+        }
+      }
     }
 
     if (recipeIds.length === 0) return [];
