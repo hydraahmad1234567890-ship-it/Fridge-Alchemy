@@ -3,7 +3,7 @@
  * Handles global search, pantry matching, and multi-recipe varieties.
  */
 
-const SPOONACULAR_KEY = "202185828e7040cbb887aa19addb24b5";
+const SPOONACULAR_KEY = import.meta.env.VITE_SPOONACULAR_KEY;
 
 /**
  * MASTER FETCH: Handles both Pantry varieties and Dish searches
