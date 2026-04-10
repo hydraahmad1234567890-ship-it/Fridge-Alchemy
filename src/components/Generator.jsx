@@ -14,15 +14,8 @@ const Generator = ({ onGenerate, isLoading, setIsLoading }) => {
     
     setIsLoading(true);
     try {
-      // Global Spoonacular Search (Multi-Recipe)
       const results = await fetchVarieties(input, searchMode, servings);
-      
-      if (results && results.length > 0) {
-        onGenerate(results);
-      } else {
-        alert("The Alchemical archives found no matches for those ingredients. Try broader terms!");
-        setIsLoading(false);
-      }
+      onGenerate(results);
     } catch (err) {
       console.error(err);
       alert("Connectivity with the culinary cloud was lost. Check your connection!");
