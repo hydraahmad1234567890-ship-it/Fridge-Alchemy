@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neon-orange: #FF5F1F;
+  --color-neon-lime: #32CD32;
+  --color-neon-blue: #1F51FF;
+}
+
+body {
+  background-color: #09090b; /* zinc-950 */
+  color: white;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.glass {
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.glass-light {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.neon-orange-glow {
+  box-shadow: 0 0 20px rgba(255, 95, 31, 0.3);
+}
+
+.neon-lime-glow {
+  box-shadow: 0 0 20px rgba(50, 205, 50, 0.3);
+}
+
+.neon-blue-glow {
+  box-shadow: 0 0 20px rgba(31, 81, 255, 0.3);
+}
+
+@keyframes whisk {
+  0% { transform: rotate(0deg) translateX(0); }
+  25% { transform: rotate(15deg) translateX(5px); }
+  50% { transform: rotate(-15deg) translateX(-5px); }
+  100% { transform: rotate(0deg) translateX(0); }
+}
+
+.animate-whisk {
+  animation: whisk 0.4s infinite ease-in-out;
+}
